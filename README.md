@@ -30,3 +30,8 @@ $ qemu-system-x86_64 cocotiOS.img
 
 ![](https://i.imgur.com/B3Ra9U8.png)
 
+# Reference
+
+1. [mikeos: write your own os](http://mikeos.sourceforge.net/write-your-own-os.html#gofurther)
+2. [wiki: int 10h](https://www.wikiwand.com/en/INT_10H)
+
