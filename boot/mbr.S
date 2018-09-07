@@ -9,6 +9,17 @@ start:
 	mov ax, 07C0h		; Set data segment to where we're loaded
 	mov ds, ax
 
+	mov ax, 0xb800
+	mov gs, ax
+
+; clean screen
+	mov ax, 0600h
+	mov bx, 0700h
+	mov cx, 0
+	mov dx, 184fh
+
+	int 10h
+
 
 	mov si, text_string	; Put string position into SI
 	call print_string	; Call our string-printing routine
@@ -24,23 +35,21 @@ print_string:			; Routine: output string in SI to screen
 	mov bh, 0
 	int 0x10
 
+	mov bx, 0
+	mov bl, dh
+
+	
 .repeat:
 
 	lodsb			; Get character from string
-	
-
-	mov ah, 09h		; 
-	mov bl, 02h		; green text
-	mov bh, 0
-	mov cx, 1h
 
 	cmp al, 0
 	je .done		; If char is zero, end of string
-	int 10h			; Otherwise, print it
 
-	add dl, 1
-	mov ah, 02h
-	int 10h
+	mov byte [gs:bx], al
+	add bx, 1
+	mov byte [gs:bx], 0xA4
+	add bx, 1
 
 	jmp .repeat
 
