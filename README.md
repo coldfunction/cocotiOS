@@ -35,7 +35,7 @@ $ qemu-system-x86_64 cocotiOS.img
 
 # Current results
 
-![](https://i.imgur.com/vUXCwZU.png)
+![](https://i.imgur.com/EXpSjGs.png)
 
 # Reference
 
