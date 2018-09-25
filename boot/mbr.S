@@ -4,7 +4,7 @@ BITS 16
 
 start:
 	mov ax, 07C0h		; Set up 4K stack space after this bootloader
-	add ax, 32		; 512 / 16 bytes per paragraph
+	add ax, 32			; 512 / 16 bytes per paragraph
 	mov ss, ax
 	mov sp, 4096
 
@@ -26,11 +26,9 @@ start:
 	mov si, text_string	; Put string position into SI
 	call print_string	; Call our string-printing routine
 
-	;jmp $			; Jump here - infinite loop!
-
 	mov eax, LOADER_START_SECTOR
 	mov bx,  LOADER_BASE_ADDR 		; The addr we want to write from loader
-	mov cx,  1				  		; The sector num we want to load later
+	mov cx,  4				  		; The sector num we want to load later
 	call rd_disk_m_16				; Start to load sector
 
 	jmp LOADER_BASE_ADDR
@@ -104,7 +102,7 @@ rd_disk_m_16:
 	text_string db 'Hello cocotiOS!', 0
 
 
-print_string:			; Routine: output string in SI to screen
+print_string:				; Routine: output string in SI to screen
 	mov ah, 3
 	mov bh, 0
 	int 0x10
@@ -115,10 +113,10 @@ print_string:			; Routine: output string in SI to screen
 	
 .repeat:
 
-	lodsb			; Get character from string
+	lodsb					; Get character from string
 
 	cmp al, 0
-	je .done		; If char is zero, end of string
+	je .done				; If char is zero, end of string
 
 	mov byte [gs:bx], al
 	add bx, 1
@@ -132,4 +130,4 @@ print_string:			; Routine: output string in SI to screen
 
 
 	times 510-($-$$) db 0	; Pad remainder of boot sector with 0s
-	dw 0xAA55		; The standard PC boot signature
+	dw 0xAA55				; The standard PC boot signature
