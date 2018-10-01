@@ -72,7 +72,7 @@ rd_disk_m_16:
 	out dx, al
 	
 ; step 4: Check the disk status
-.not_ready
+.not_ready:
 	; Use the same COM port, write is for command, read is for disk status
 	nop
 	in al, dx
@@ -91,7 +91,7 @@ rd_disk_m_16:
 									; per transfer. Thus total di*512/2 times.
 
 	mov dx, 0x1f0
-.go_on_read
+.go_on_read:
 	in ax, dx
 	mov [bx], ax
 	add bx, 2
