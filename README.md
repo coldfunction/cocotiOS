@@ -1,5 +1,5 @@
 # cocotiOS
-A simple OS implementation for x86_64
+A simple OS implementation for IA32
 
 
 # Prerequisites
