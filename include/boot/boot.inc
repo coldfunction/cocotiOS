@@ -1,6 +1,7 @@
 ; loader & kernel
-LOADER_BASE_ADDR equ 0x1200
+LOADER_BASE_ADDR    equ 0x1200
 LOADER_START_SECTOR equ 0x1
+LOADER_STACK_TOP    equ LOADER_BASE_ADDR
 
 ; =========================                   GDT fields                ===============================
 ;┌──────────────┬─────┬─────┬─────┬─────┬──────────┬──────┬───────┬──────┬───────────┬──────────────────┐
