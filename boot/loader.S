@@ -13,7 +13,7 @@ jmp loader_start
     DATA_STACK_DESC: dd 0x0000FFFF
                      dd DESC_DATA_HIGH4
 
-    VIDEO_DESC     : dd 0x80000007 ;limit=(0xbffff-0xb8000)/4k=0x7
+    VIDEO_DESC:      dd 0x80000007 ;limit=(0xbffff-0xb8000)/4k=0x7
                      dd DESC_VIDEO_HIGH4
 
     GDT_SIZE  equ $ - GDT_BASE
@@ -28,40 +28,18 @@ jmp loader_start
     gdt_ptr dw GDT_LIMIT
             dd GDT_BASE
 
+    loadermsg db 'loader in real mode...'
 
-	mov si, text_string	; Put string position into SI
-	call print_string	; Call our string-printing routine
-	
-;	mov byte [gs:0x00], '2'
-;	mov byte [gs:0x01], 0xA4
+loader_start:
 
-	jmp $
-	
-	text_string db 'Loader is ready!!!', 0
+; INT: 0x10  function: 0x13 print string
+    mov sp, LOADER_BASE_ADDR
+    mov bp, loadermsg        ; ES:BP = string addr
+    mov cx, 22               ; CX = string length
+    mov ax, 0x1301           ; AH = 13, AL = 01h
+    mov bx, 0x001f           ; page num is 0 (BH = 0) some color(BL= 1fh)
+    mov dx, 0x1800
+    int 0x10
 
-print_string:			; Routine: output string in SI to screen
-	mov ah, 3
-	mov bh, 0
-	int 0x10
 
-	mov bx, 0
-	mov bl, dh
-	add bx, 32
-	
-.repeat:
-
-	lodsb			; Get character from string
-
-	cmp al, 0
-	je .done		; If char is zero, end of string
-
-	mov byte [gs:bx], al
-	add bx, 1
-	mov byte [gs:bx], 0xA4
-	add bx, 1
-
-	jmp .repeat
-
-.done:
-	ret
 
