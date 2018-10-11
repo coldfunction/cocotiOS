@@ -41,5 +41,39 @@ loader_start:
     mov dx, 0x1800
     int 0x10
 
+; ============= READY TO PROTECT MODE ===============
+; 1. Enable A20
+; 2. Load GDT
+; 3. Set PE of CR0 to 1
+
+
+; ------------- Enable A20 ---------------
+    in al, 0x92
+    or al, 0000_0010B
+    out 0x92, al
+
+; ------------- Load GDT ---------------
+    lgdt [gdt_ptr]
+
+; ------------- PE on, protect mode on ---------------
+    mov eax, cr0
+    or eax, 0x00000001
+    mov cr0, eax
+
+    jmp dword SELECTOR_CODE:p_mode_start ; flush the pipline
+
+[bits 32]
+p_mode_start:
+    mov ax, SELECTOR_DATA
+    mov ds, ax
+    mov es, ax
+    mov ss, ax
+    mov esp, LOADER_STACK_TOP
+    mov ax, SELECTOR_VIDEO
+    mov gs, ax
+
+    mov byte [gs:160], 'p'
+
+    jmp $
 
 
